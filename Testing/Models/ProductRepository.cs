@@ -20,5 +20,30 @@ namespace Testing.Models
         {
             return _conn.QuerySingle<Product>("Select * FROM products WHERE ProductID = @Id;", new { @Id = id });
         }
+
+        public void UpdateProduct(Product product)
+        {
+            _conn.Execute("UPDATE products SET Name = @name, Price = @price WHERE ProductID = @Id;", new { @name = product.Name, @price = product.Price, @Id = product.ProductID });
+        }
+
+        public void InsertProduct(Product productToInsert)
+        {
+            _conn.Execute("INSERT INTO products (Name, Price, CategoryID) VALUES (@name, @price, @categoryID);",
+                new { name = productToInsert.Name, price = productToInsert.Price, categoryID = productToInsert.CategoryID });
+        }
+
+        public IEnumerable<Category> GetCategories()
+        {
+            return _conn.Query<Category>("SELECT * FROM categories;");
+        }
+
+        public Product AssignCategory()
+        {
+            var categoryList = GetCategories();
+            var product = new Product();
+            product.Categories = categoryList;
+
+            return product;
+        }
     }
 }
