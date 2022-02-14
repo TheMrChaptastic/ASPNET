@@ -18,12 +18,12 @@ namespace Testing.Models
 
         public Product GetProduct(int id)
         {
-            return _conn.QuerySingle<Product>("Select * FROM products WHERE ProductID = @Id;", new { @Id = id });
+            return _conn.QuerySingle<Product>("Select * FROM products WHERE ProductID = @Id;", new { Id = id });
         }
 
         public void UpdateProduct(Product product)
         {
-            _conn.Execute("UPDATE products SET Name = @name, Price = @price WHERE ProductID = @Id;", new { @name = product.Name, @price = product.Price, @Id = product.ProductID });
+            _conn.Execute("UPDATE products SET Name = @name, Price = @price WHERE ProductID = @Id;", new { name = product.Name, price = product.Price, Id = product.ProductID });
         }
 
         public void InsertProduct(Product productToInsert)
@@ -44,6 +44,16 @@ namespace Testing.Models
             product.Categories = categoryList;
 
             return product;
+        }
+
+        public void DeleteProduct(Product product)
+        {
+            _conn.Execute("DELETE FROM REVIEWS WHERE ProductID = @Id;",
+                new { Id = product.ProductID });
+            _conn.Execute("DELETE FROM Sales WHERE ProductID = @Id;",
+                new { Id = product.ProductID });
+            _conn.Execute("DELETE FROM products WHERE ProductID = @Id;",
+                new { Id = product.ProductID });
         }
     }
 }
