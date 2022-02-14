@@ -15,5 +15,10 @@ namespace Testing.Models
         {
             return _conn.Query<Product>("SELECT * FROM products");
         }
+
+        public Product GetProduct(int id)
+        {
+            return _conn.QuerySingle<Product>("Select * FROM products WHERE ProductID = @Id;", new { @Id = id });
+        }
     }
 }
